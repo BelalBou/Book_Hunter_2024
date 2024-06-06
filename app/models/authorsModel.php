@@ -4,13 +4,13 @@ namespace App\Models\AuthorsModel;
 
 use \PDO;
 
-function findAllPopulars(PDO $connexion, int $limit = 30): array
+function findAllPopulars(PDO $connexion, int $limit = 26): array
 {
     $sql = "SELECT a.picture, CONCAT(a.firstname, ' ', a.lastname) AS author_name, a.biography, AVG(un.note) AS note, a.id AS authorID
     FROM authors a
     INNER JOIN books b ON a.id = b.author_id
     INNER JOIN users_notations un ON b.id = un.book_id
-    GROUP BY authorID
+    GROUP BY a.id, a.picture, a.firstname, a.lastname, a.biography
     ORDER BY note DESC
     LIMIT :limit;";
 
@@ -21,7 +21,7 @@ function findAllPopulars(PDO $connexion, int $limit = 30): array
     return $rs->fetchAll(PDO::FETCH_ASSOC);
 }
 
-function findOneById(PDO $connexion, int $id): array
+function findOneByAuthorId(PDO $connexion, int $id): array
 {
     $sql = "SELECT 
     a.picture, 
@@ -33,7 +33,7 @@ function findOneById(PDO $connexion, int $id): array
     INNER JOIN books b ON b.author_id = a.id
     LEFT JOIN users_notations un ON b.id = un.book_id
     WHERE a.id = :author_id
-    GROUP BY a.id
+    GROUP BY a.id, a.picture, a.firstname, a.lastname, a.biography
     ORDER BY note DESC;";
 
     $rs = $connexion->prepare($sql);
@@ -42,3 +42,4 @@ function findOneById(PDO $connexion, int $id): array
 
     return $rs->fetch(PDO::FETCH_ASSOC);
 }
+?>

@@ -17,7 +17,7 @@ function indexAction(PDO $connexion)
     global $content, $title;
     $title = "Books";
     ob_start();
-    include '../app/views/pages/books/index.php';
+    include '../app/views/pages/books/_index.php';
     $content = ob_get_clean();
 }
 
@@ -31,6 +31,6 @@ function showAction(PDO $connexion, int $id)
     global $content, $title;
     $title = "Book's title";
     ob_start();
-    include '../app/views/pages/books/show.php';
+    include '../app/views/pages/books/_show.php';
     $content = ob_get_clean();
 }
